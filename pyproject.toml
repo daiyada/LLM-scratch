@@ -11,3 +11,8 @@ dynamic = ["version", "description"]
 
 [tool.black]
 line-length = 79
+
+[tool.pytest.ini_options]
+addopts = "-v"
+testpaths = ["tests"]
+pythonpath = ["src"]
