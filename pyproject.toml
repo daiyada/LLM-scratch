@@ -8,3 +8,6 @@ authors = [{name = "daiyada"}]
 license = "GPL-3.0-or-later"
 license-files = ["LICENSE"]
 dynamic = ["version", "description"]
+
+[tool.black]
+line-length = 79
