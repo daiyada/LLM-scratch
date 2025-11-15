@@ -1,6 +1,7 @@
 import pytest
 import torch
 
+
 @pytest.fixture(scope="function")
 def inputs_tensor() -> torch.Tensor:
     """Example of tensor input."""
@@ -16,9 +17,9 @@ def inputs_tensor() -> torch.Tensor:
     )
     return inputs
 
+
 @pytest.fixture(scope="function")
 def batch_tensor(inputs_tensor: torch.Tensor) -> torch.Tensor:
     """Example of tensor batch consisted of 2 inputs_tensors."""
     batch = torch.stack([inputs_tensor, inputs_tensor], dim=0)
     return batch
-
