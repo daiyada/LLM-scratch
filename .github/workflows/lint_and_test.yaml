@@ -22,8 +22,8 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install black==25.11.0 flake8==7.3.0 pytest==9.0.1
-      
+          python -m pip install -r requirements.txt
+
       - name: Run black
         run: black --check .
 
@@ -31,4 +31,4 @@ jobs:
         run: flake8 .
 
       - name: Run test
-        run: pytest src/tests -v --maxfail=1 --disable-warnings
+        run: pytest tests -v --maxfail=1 --disable-warnings
