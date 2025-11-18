@@ -1,5 +1,3 @@
-import argparse
-
 import torch
 import torch.nn as nn
 
@@ -59,7 +57,7 @@ class MultiHeadAttention(nn.Module):
     ):
         """Define constructor."""
         super().__init__()
-        assert (d_out % num_heads == 0), "d_out must be divisible by num_heads"
+        assert d_out % num_heads == 0, "d_out must be divisible by num_heads"
 
         self._d_out = d_out
         self._num_heads = num_heads
@@ -74,9 +72,7 @@ class MultiHeadAttention(nn.Module):
         self._dropout = nn.Dropout(dropout)
         self.register_buffer(
             "mask",
-            torch.triu(
-                torch.ones(context_length, context_length), diagonal=1
-            )
+            torch.triu(torch.ones(context_length, context_length), diagonal=1),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -101,13 +97,13 @@ class MultiHeadAttention(nn.Module):
 
         attn_scores.masked_fill_(mask_bool, -torch.inf)
 
-        attn_weights = torch.softmax(attn_scores / keys.shape[-2] ** 0.5, dim=-1)
+        attn_weights = torch.softmax(
+            attn_scores / keys.shape[-2] ** 0.5, dim=-1
+        )
         attn_weights = self._dropout(attn_weights)
 
         context_vec = (attn_weights @ values).transpose(1, 2)
-        context_vec = context_vec.contiguous().view(
-            b, num_tokens, self._d_out
-        )
+        context_vec = context_vec.contiguous().view(b, num_tokens, self._d_out)
         context_vec = self._out_proj(context_vec)
 
         return context_vec
