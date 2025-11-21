@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from LLM_scratch.config import GPT124M
+
 
 class GELU(nn.Module):
 
@@ -21,3 +23,19 @@ class GELU(nn.Module):
                 )
             )
         )
+
+
+class FeedFoward(nn.Module):
+
+    def __init__(self, cfg: GPT124M) -> None:
+        """Define constructor."""
+        super().__init__()
+        self._layers = nn.Sequential(
+            nn.Linear(cfg.emb_dim, 4 * cfg.emb_dim),
+            GELU(),
+            nn.Linear(4 * cfg.emb_dim, cfg.emb_dim),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Define forward propagation."""
+        return self._layers(x)
