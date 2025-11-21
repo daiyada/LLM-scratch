@@ -4,7 +4,7 @@ import torch.nn as nn
 
 class LayerNorm(nn.Module):
 
-    def __init__(self, emb_dim) -> None:
+    def __init__(self, emb_dim: int) -> None:
         """Define constructor."""
         super().__init__()
         self._epsilon = 1e-5
