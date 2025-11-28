@@ -1,6 +1,14 @@
 import pytest
 import torch
 
+from LLM_scratch.config import GPT124M
+
+
+@pytest.fixture(scope="function")
+def gpt124m_config() -> GPT124M:
+    """Config for GPT124M."""
+    return GPT124M()
+
 
 @pytest.fixture(scope="function")
 def inputs_tensor() -> torch.Tensor:
