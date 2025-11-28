@@ -1,5 +1,6 @@
 import pytest
 import torch
+import tiktoken
 
 from LLM_scratch.config import GPT124M
 
@@ -8,6 +9,12 @@ from LLM_scratch.config import GPT124M
 def gpt124m_config() -> GPT124M:
     """Config for GPT124M."""
     return GPT124M()
+
+
+@pytest.fixture(scope="session")
+def tokenizer() -> tiktoken:
+    """Tokenizer for gpt2."""
+    return tiktoken.get_encoding("gpt2")
 
 
 @pytest.fixture(scope="function")
