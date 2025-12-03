@@ -58,6 +58,6 @@ def test_generated_txt(tokenizer: tiktoken, gpt124m_config: GPT124M) -> None:
     generated_text = token_ids_to_txt(token_ids, tokenizer)
     assert len(generated_text.split()) == 9
     assert generated_text == (
-        "Evert effort moves you fortunate mandatoryicted",
-        " VIDEOousse Fan526 WestbrookinchAdmin",
+        "Evert effort moves you fortunate mandatoryicted"
+        " VIDEOousse Fan526 WestbrookinchAdmin"
     )
