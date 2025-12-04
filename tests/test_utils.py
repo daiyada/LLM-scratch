@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 import tiktoken
 import torch
@@ -8,7 +10,31 @@ from LLM_scratch.utils import (
     generate_txt_simple,
     txt_to_token_ids,
     token_ids_to_txt,
+    prepare_txt_data,
 )
+
+
+def test_prepare_not_existed_txt_data(tmp_path: Path) -> None:
+    """Test prepare txt data in case txt file is not existed."""
+    expected_start_txt = (
+        "I HAD always thought Jack Gisburn rather a cheap genius"
+    )
+    txt_path = tmp_path / "sample.txt"
+    assert not txt_path.exists()
+    res_data = prepare_txt_data(str(txt_path))
+    assert res_data.startswith(expected_start_txt)
+    assert txt_path.exists()
+
+
+def test_prepare_existed_txt_data(tmp_path: Path) -> None:
+    """Test prepare txt data in case txt file is not existed."""
+    txt_path = tmp_path / "sample.txt"
+    content = "Hello, World!!"
+    with open(txt_path, mode="w", encoding="utf-8") as f:
+        f.write(content)
+    assert txt_path.exists()
+    res_data = prepare_txt_data(str(txt_path))
+    assert res_data == content
 
 
 @pytest.mark.parametrize("max_new_tokens", [0, 1, 5])
