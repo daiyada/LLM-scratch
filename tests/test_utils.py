@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 import tiktoken
 import torch
+from torch.utils.data import DataLoader
 
 from LLM_scratch.config import GPT124M
 from LLM_scratch.gpt import GPTModel
@@ -11,6 +12,7 @@ from LLM_scratch.utils import (
     txt_to_token_ids,
     token_ids_to_txt,
     prepare_txt_data,
+    create_dataloader_v1,
 )
 
 
@@ -87,3 +89,23 @@ def test_generated_txt(tokenizer: tiktoken, gpt124m_config: GPT124M) -> None:
         "Evert effort moves you fortunate mandatoryicted"
         " VIDEOousse Fan526 WestbrookinchAdmin"
     )
+
+
+@pytest.mark.parametrize(
+    ("batch_size", "max_length"), [(1, 1), (2, 2), (4, 4)]
+)
+def test_create_dataloader_v1(
+    tmp_path: Path, batch_size: int, max_length
+) -> None:
+    """Test create dataloader v1 function."""
+    txt_path = tmp_path / "sample.txt"
+    assert not txt_path.exists()
+    txt_data = prepare_txt_data(str(txt_path))
+    data_loader = create_dataloader_v1(
+        txt_data, batch_size=batch_size, max_length=max_length
+    )
+    assert type(data_loader) is DataLoader
+    data_iter = iter(data_loader)
+    first_input_batch, first_target_batch = next(data_iter)
+    assert first_input_batch.shape == torch.Size([batch_size, max_length])
+    assert first_target_batch.shape == torch.Size([batch_size, max_length])
